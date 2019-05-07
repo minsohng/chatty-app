@@ -21,21 +21,40 @@ class App extends Component {
     super();
     this.state = {
       currentUser: 'Anonymous',
-      messages: [
-        {
-          username: undefined,
-          content: undefined,
-        }
-      ],
+      messages: [],
     }
   }
+
+  handleEnter = (messageBlock) => {
+    console.log(messageBlock)
+    this.setState({
+      messages: [...this.state.messages, messageBlock.message],
+      currentUser: messageBlock.message.username,
+    });
+
+  }
+
+  componentDidMount() {
+    // console.log("componentDidMount <App />");
+    // setTimeout(() => {
+    //   console.log("Simulating incoming message");
+    //   // Add a new message to the list of messages in the data store
+    //   const newMessage = {id: 11, username: "Michelle", content: "Hello there!"};
+    //   const messages = this.state.messages.concat(newMessage)
+    //   // Update the state of the app component.
+    //   // Calling setState will trigger a call to render() in App and all child components.
+    //   this.setState({messages: messages})
+    // }, 3000);
+  }
+
+
 
   render() {
     return (
       <Fragment>
         <Navbar />
-        <MessageList />
-        <ChatBar/>
+        <MessageList currentUser={this.state.currentUser} messages={this.state.messages}/>
+        <ChatBar currentUser={this.state.currentUser} handleEnter={this.handleEnter}/>
       </Fragment>
     );
   }

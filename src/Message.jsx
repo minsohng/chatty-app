@@ -7,11 +7,8 @@ class Message extends Component {
   }
 
   createMessage(type) {
-    const message = {}
+    const message = this.props.message;
     if (type === 'incomingMessage') {
-      message.username = this.props.message.username;
-      message.content = this.props.message.content;
-
       return (
         <div className="message">
           <span className="message-username">{message.username}</span>
@@ -19,7 +16,6 @@ class Message extends Component {
         </div>
       )
     } else if (type === 'incomingNotification') {
-      message.content = this.props.message.content;
       return (
         <div className="message system">
           {message.content}
