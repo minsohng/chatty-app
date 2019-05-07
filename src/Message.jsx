@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 
 class Message extends Component {
   constructor(props) {
@@ -33,10 +33,12 @@ class Message extends Component {
     const type = this.props.message.username ? 'incomingMessage' : 'incomingNotification'
     const message = this.createMessage(type);
     return (
-      <div>
+      <Fragment>
         {message}
-      </div>
+      </Fragment>
     )
   }
 }
 export default Message;
+
+

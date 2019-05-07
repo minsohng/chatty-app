@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import ChatBar from './ChatBar.jsx';
-import Message from './Message.jsx';
 import MessageList from './MessageList.jsx';
+
 
 class Navbar extends Component {
 
@@ -16,13 +16,27 @@ class Navbar extends Component {
 
 
 class App extends Component {
+
+  constructor(props) {
+    super();
+    this.state = {
+      currentUser: 'Anonymous',
+      messages: [
+        {
+          username: undefined,
+          content: undefined,
+        }
+      ],
+    }
+  }
+
   render() {
     return (
-      <div>
-      <Navbar />
-      <MessageList />
-      <ChatBar/>
-      </div>
+      <Fragment>
+        <Navbar />
+        <MessageList />
+        <ChatBar/>
+      </Fragment>
     );
   }
 }
