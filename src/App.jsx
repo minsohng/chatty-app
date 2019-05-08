@@ -58,8 +58,10 @@ class App extends Component {
         })
         return;
       }
+
+
       this.setState({
-        messages: [...this.state.messages, data.message],
+        messages: [...this.state.messages, data],
       });
     }
 

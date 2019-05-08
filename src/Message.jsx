@@ -7,12 +7,14 @@ class Message extends Component {
   }
 
   createMessage(type) {
-    const message = this.props.message;
+    const {message, header} = this.props.message
+    
+    console.log(message.username)
     if (type === 'incomingMessage') {
       return (
         <div className="message">
-          <span className="message-username">{message.username}</span>
-          <span className="message-content">{message.content}</span>
+          <span style={{color: header.textColor}} className="message-username">{message.username}</span>
+          <span style={{color: header.textColor}} className="message-content">{message.content}</span>
         </div>
       )
     } else if (type === 'incomingNotification') {
@@ -26,7 +28,7 @@ class Message extends Component {
 
   render() {
 
-    const type = this.props.message.username ? 'incomingMessage' : 'incomingNotification'
+    const type = this.props.message.message.username ? 'incomingMessage' : 'incomingNotification'
     const message = this.createMessage(type);
     return (
       <Fragment>

@@ -19,12 +19,23 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer({ server });
 
+// css color palette
+const cssPalette = ['#5daf3b', //green
+                    '#d8972d', //yellow
+                    '#2d71d8', // blue
+                    '#d82dcc']; // purple
+
+const getRandomInt = max => Math.floor(Math.random() * Math.floor(max))
+
+
+
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log("people connected", wss.clients.size)
   const socketId = uuidv1();
+  const textColor = cssPalette[getRandomInt(cssPalette.length)];
   console.log(`Client connected: ${socketId}`);
 
   wss.clients.forEach((client) => {
@@ -33,7 +44,7 @@ wss.on('connection', (ws) => {
     }
   });
 
-
+  
   ws.on('message', (message) => {
 
     const {message: {type, content, username}} = JSON.parse(message);
@@ -44,11 +55,14 @@ wss.on('connection', (ws) => {
     else if (type === 'postNotification') {
       returnType = 'incomingNotification';
     }
-    
+
     const messageWithId = {
-       
+      id: uuidv1(),
+      header: {
+        socketId: socketId,
+        textColor: textColor,
+      }, 
       message: {
-        id: uuidv1(),
         type: returnType,
         content: content,
         username: username,
