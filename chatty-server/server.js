@@ -26,22 +26,40 @@ wss.on('connection', (ws) => {
   console.log("people connected", wss.clients.size)
   const socketId = uuidv1();
   console.log(`Client connected: ${socketId}`);
+
+  wss.clients.forEach((client) => {
+    if (client.readyState === ws.OPEN) {
+      client.send(JSON.stringify({connectedUsersCount: wss.clients.size}));
+    }
+  });
+
+
   ws.on('message', (message) => {
 
     const {message: {type, content, username}} = JSON.parse(message);
-
-    // console.log(jsonMessage.message.content)
+    let returnType;
+    if (type === 'postMessage') {
+      returnType = 'incomingMessage';
+    } 
+    else if (type === 'postNotification') {
+      returnType = 'incomingNotification';
+    }
+    
     const messageWithId = {
+       
       message: {
         id: uuidv1(),
-        type: type,
+        type: returnType,
         content: content,
         username: username,
       }
+
     };
 
+    console.log(messageWithId)
 
-    wss.clients.forEach(function each(client) {
+
+    wss.clients.forEach((client) => {
       if (client.readyState === ws.OPEN) {
         client.send(JSON.stringify(messageWithId));
       }
@@ -52,8 +70,12 @@ wss.on('connection', (ws) => {
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {
-    
     console.log(`ClientID ${socketId} disconnected`);
     ws.terminate();
+    wss.clients.forEach((client) => {
+      if (client.readyState === ws.OPEN) {
+        client.send(JSON.stringify({connectedUsersCount: wss.clients.size}));
+      }
+    });
   });
 });

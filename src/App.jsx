@@ -6,9 +6,12 @@ import MessageList from './MessageList.jsx';
 class Navbar extends Component {
 
   render() {
+    const usersCount = this.props.connectedUsersCount;
+    
     return (
       <nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
+        <div className="navbar-usercount">{usersCount} {usersCount > 1 ? 'Users' : 'User'} connected</div>
       </nav>
     );
   }
@@ -22,6 +25,7 @@ class App extends Component {
     this.state = {
       currentUser: 'Anonymous',
       messages: [],
+      connectedUsersCount: null,
     }
     this.socket = undefined;
   }
@@ -30,14 +34,15 @@ class App extends Component {
 
   handleEnter = (messageBlock) => {
     const {newUsername} = messageBlock;
-
+    
     if (newUsername) {  // if you are setting new username
       this.setState({
         currentUser: newUsername,
       });
-    } else { 
-      this.socket.send(JSON.stringify(messageBlock));
-    }
+    } 
+
+    this.socket.send(JSON.stringify(messageBlock));
+    
   }
 
   componentDidMount() {
@@ -45,11 +50,17 @@ class App extends Component {
     
     this.socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
+      const {connectedUsersCount} = data
 
+      if (connectedUsersCount) {
+        this.setState({
+          connectedUsersCount: connectedUsersCount,
+        })
+        return;
+      }
       this.setState({
         messages: [...this.state.messages, data.message],
-        
-      })
+      });
     }
 
   }
@@ -59,7 +70,7 @@ class App extends Component {
   render() {
     return (
       <Fragment>
-        <Navbar />
+        <Navbar connectedUsersCount={this.state.connectedUsersCount}/>
         <MessageList currentUser={this.state.currentUser} messages={this.state.messages}/>
         <ChatBar currentUser={this.state.currentUser} handleEnter={this.handleEnter}/>
       </Fragment>

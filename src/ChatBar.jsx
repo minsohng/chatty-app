@@ -20,8 +20,12 @@ class ChatBar extends Component {
   onEnter = (event) => {
     const inputDOM = event.target.name;
 
-    if (event.key === "Enter" && inputDOM === 'chatbar-username') {
+    if (event.key === "Enter" && inputDOM === 'chatbar-username' && event.target.value !== this.props.currentUser) {
       this.props.handleEnter({
+        message: {
+          type: 'postNotification',
+          content: `${this.props.currentUser} has changed their name to ${event.target.value}`,
+        },
         newUsername: event.target.value,
       });
     }
@@ -29,7 +33,7 @@ class ChatBar extends Component {
     if (event.key === "Enter" &&inputDOM === 'chatbar-message') {
       this.props.handleEnter({
         message: {
-          type: 'incomingMessage',
+          type: 'postMessage',
           content: this.state.message,
           username: this.props.currentUser,
         },
