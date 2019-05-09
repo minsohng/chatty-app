@@ -25,9 +25,15 @@ const cssPalette = ['#5daf3b', //green
                     '#2d71d8', // blue
                     '#d82dcc']; // purple
 
-const getRandomInt = max => Math.floor(Math.random() * Math.floor(max))
+const getRandomInt = max => Math.floor(Math.random() * Math.floor(max));
 
-
+wss.broadcast = (data) => {
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(data));
+    }
+  });
+}
 
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
@@ -36,13 +42,8 @@ wss.on('connection', (ws) => {
   const socketId = uuidv1();
   const textColor = cssPalette[getRandomInt(cssPalette.length)];
 
-  wss.clients.forEach((client) => {
-    if (client.readyState === ws.OPEN) {
-      client.send(JSON.stringify({connectedUsersCount: wss.clients.size}));
-    }
-  });
+  wss.broadcast({connectedUsersCount: wss.clients.size});
 
-  
   ws.on('message', (message) => {
 
     const {message: {type, content, username}} = JSON.parse(message);
@@ -65,23 +66,14 @@ wss.on('connection', (ws) => {
         content: content,
         username: username,
       }
-
     };
 
-    wss.clients.forEach((client) => {
-      if (client.readyState === ws.OPEN) {
-        client.send(JSON.stringify(messageWithId));
-      }
-    });
+    wss.broadcast(messageWithId);
   });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {
     ws.terminate();
-    wss.clients.forEach((client) => {
-      if (client.readyState === ws.OPEN) {
-        client.send(JSON.stringify({connectedUsersCount: wss.clients.size}));
-      }
-    });
+    wss.broadcast({connectedUsersCount: wss.clients.size});
   });
 });
