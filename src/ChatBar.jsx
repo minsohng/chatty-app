@@ -14,6 +14,7 @@ class ChatBar extends Component {
       this.setState({
         message: event.target.value,
       });
+      this.props.broadcastTyping();
     }
   }
 
@@ -47,6 +48,10 @@ class ChatBar extends Component {
     
   }
 
+  onKeyUp = () => {
+    this.props.handleKeyUp();
+  }
+
   render() {
 
     return (
@@ -66,6 +71,7 @@ class ChatBar extends Component {
           onKeyPress={this.onEnter}
           onChange={this.handleChange}
           value={this.state.message}
+          onKeyUp={this.onKeyUp}
         />
       </footer>
     )

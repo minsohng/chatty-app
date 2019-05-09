@@ -26,10 +26,18 @@ class App extends Component {
       currentUser: 'Anonymous',
       messages: [],
       connectedUsersCount: null,
+      isTyping: false,
     }
     this.socket = undefined;
   }
 
+  broadcastTyping = () => {
+    this.socket.send(JSON.stringify({isTyping: true})); 
+  }
+
+  handleKeyUp = () => {
+    this.socket.send(JSON.stringify({notTyping: true}));
+  }
 
 
   handleEnter = (messageBlock) => {
@@ -40,9 +48,11 @@ class App extends Component {
         currentUser: newUsername,
       });
     } 
-
     this.socket.send(JSON.stringify(messageBlock));
-    
+  }
+
+  handleKeyUp = () => {
+    this.socket.send(JSON.stringify({notTyping: true})); 
   }
 
   componentDidMount() {
@@ -50,7 +60,23 @@ class App extends Component {
     
     this.socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      const {connectedUsersCount} = data
+      const {connectedUsersCount} = data;
+      const {isTyping, notTyping} = data;
+      if (isTyping) {
+        this.setState({
+          isTyping: true,
+        });
+        return;
+      }
+
+      if (notTyping) {
+        this.setState({
+          isTyping: false,
+        });
+        return;
+      }
+
+
 
       if (connectedUsersCount) {
         this.setState({
@@ -66,7 +92,6 @@ class App extends Component {
     }
   }
 
-
   componentDidUpdate() {
     window.scrollTo(0,document.body.scrollHeight); //always scroll to bottom after rendering
   }
@@ -78,9 +103,32 @@ class App extends Component {
       <Fragment>
         <Navbar connectedUsersCount={this.state.connectedUsersCount}/>
         <MessageList currentUser={this.state.currentUser} messages={this.state.messages}/>
-        <ChatBar currentUser={this.state.currentUser} handleEnter={this.handleEnter}/>
+        
+        <ChatBar 
+          currentUser={this.state.currentUser} 
+          handleEnter={this.handleEnter} 
+          broadcastTyping={this.broadcastTyping} 
+  
+          handleKeyUp={this.handleKeyUp}
+        />
+        <TypeIndicator isTyping={this.state.isTyping}/>
       </Fragment>
     );
+  }
+}
+
+class TypeIndicator extends Component {
+
+  shouldComponentUpdate() {
+    if (this.props.isTyping === true) {
+      return false;
+    } 
+    return true;
+
+  }
+  
+  render() {
+    return <div className="typing-indicator message system">{this.props.isTyping ? 'someone is typing...' : undefined}</div>
   }
 }
 export default App;

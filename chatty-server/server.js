@@ -35,6 +35,7 @@ wss.broadcast = (data) => {
   });
 }
 
+
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
@@ -46,6 +47,26 @@ wss.on('connection', (ws) => {
 
   ws.on('message', (message) => {
 
+    //tell everyone else that you're typing
+    if (JSON.parse(message).isTyping) {
+      wss.clients.forEach((client) => {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({isTyping: socketId}));
+        }
+      });
+      return;
+    }
+
+    if (JSON.parse(message).notTyping) {
+      wss.clients.forEach((client) => {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({notTyping: socketId}));
+        }
+      });
+      return;
+    }
+  
+    
     const {message: {type, content, username}} = JSON.parse(message);
     let returnType;
     if (type === 'postMessage') {
