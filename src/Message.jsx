@@ -7,20 +7,32 @@ class Message extends Component {
   }
 
   createMessage(type) {
-    const {message, header} = this.props.message
-    
-    console.log(message.username)
+    const {header} = this.props.message;
+    let {message: {content, username}} = this.props.message;
+    let img = undefined;
+ 
+    // handle image
+    let regex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+(?:png|jpg|jpeg|gif|svg)+$/;
+    if (regex.test(content)) {
+ 
+      img = content;
+      content = undefined;
+    }
+
     if (type === 'incomingMessage') {
       return (
+        <Fragment>
         <div className="message">
-          <span style={{color: header.textColor}} className="message-username">{message.username}</span>
-          <span style={{color: header.textColor}} className="message-content">{message.content}</span>
+          <span style={{color: header.textColor}} className="message-username">{username}</span>
+          <span style={{color: header.textColor}} className="message-content">{content}</span> 
         </div>
+        {img && <img src={img}/>}
+        </Fragment>
       )
     } else if (type === 'incomingNotification') {
       return (
         <div className="message system">
-          {message.content}
+          {content}
         </div>
       )
     }

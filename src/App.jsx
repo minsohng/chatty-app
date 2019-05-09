@@ -64,7 +64,10 @@ class App extends Component {
         messages: [...this.state.messages, data],
       });
     }
+  }
 
+  componentDidUpdate() {
+    window.scrollTo(0,document.body.scrollHeight);
   }
 
 
