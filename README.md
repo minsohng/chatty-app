@@ -1,45 +1,45 @@
-React Boilerplate
-=====================
+# Chatty App
 
-A minimal and light dev environment for ReactJS.
+A single page chat application which allow users to communicate with each other without having to register accounts.
 
-### Usage
+## Getting Started
 
-Clone the boilerplate and create your own git repo.
+1. Inside root folder, run `npm install`
+2. Inside chatty-server folder inside root folder, run `npm install`
+3. run `npm start` in both folders
+4. open `localhost:3000`
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
 
-Install the dependencies and start the server.
+## Screenshots
 
-```
-npm install
-npm start
-open http://localhost:3000
-```
+### Main Page
+!["Main Page"](https://github.com/minsohng/chatty-app/blob/master/docs/main.png?raw=true)
 
-### Static Files
+### Sending Chat Message
+!["Sending Chat Message"](https://raw.githubusercontent.com/minsohng/chatty-app/master/docs/chat-message.png)
 
-You can store static files like images, fonts, etc in the `build` folder.
+### Changing User Name
+!["Main Page"](https://github.com/minsohng/chatty-app/blob/master/docs/change-username.png?raw=true)
 
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
+### Sending Image
+!["Main Page"](https://github.com/minsohng/chatty-app/blob/master/docs/send%20image.png?raw=true)
 
-### Linting
 
-This boilerplate project includes React ESLint configuration.
+## Dependencies
 
-```
-npm run lint
-```
-
-### Dependencies
-
-* React
-* Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+* babel-core
+* babel-loader
+* babel-preset-es2015
+* babel-preset-react
+* css-loader
+* node-sass
+* sass-loader
+* sockjs-client
+* style-loader
+* webpack
+* webpack-dev-server
+* react
+* react-dom
+* express
+* ws
+* uuid
