@@ -24,6 +24,10 @@ A single page chat application which allow users to communicate with each other 
 ### Sending Image
 !["Main Page"](https://github.com/minsohng/chatty-app/blob/master/docs/send%20image.png?raw=true)
 
+## Additional Features
+
+### Type Indicator
+* When someone else is typing, you see the message indicating them typing
 
 ## Dependencies
 
