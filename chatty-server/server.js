@@ -33,10 +33,8 @@ const getRandomInt = max => Math.floor(Math.random() * Math.floor(max))
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
-  console.log("people connected", wss.clients.size)
   const socketId = uuidv1();
   const textColor = cssPalette[getRandomInt(cssPalette.length)];
-  console.log(`Client connected: ${socketId}`);
 
   wss.clients.forEach((client) => {
     if (client.readyState === ws.OPEN) {
@@ -70,21 +68,15 @@ wss.on('connection', (ws) => {
 
     };
 
-    console.log(messageWithId)
-
-
     wss.clients.forEach((client) => {
       if (client.readyState === ws.OPEN) {
         client.send(JSON.stringify(messageWithId));
       }
     });
-
-
   });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {
-    console.log(`ClientID ${socketId} disconnected`);
     ws.terminate();
     wss.clients.forEach((client) => {
       if (client.readyState === ws.OPEN) {

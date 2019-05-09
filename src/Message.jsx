@@ -14,7 +14,6 @@ class Message extends Component {
     // handle image
     let regex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+(?:png|jpg|jpeg|gif|svg)+$/;
     if (regex.test(content)) {
- 
       img = content;
       content = undefined;
     }
