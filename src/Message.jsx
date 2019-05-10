@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 
 class Message extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.createMessage = this.createMessage.bind(this)
   }
 
@@ -35,7 +35,7 @@ class Message extends Component {
         </div>
       )
     }
-  };
+  }
 
   render() {
 

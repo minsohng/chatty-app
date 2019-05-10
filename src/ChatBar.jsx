@@ -20,7 +20,6 @@ class ChatBar extends Component {
 
   onEnter = (event) => {
     const inputDOM = event.target.name;
-
     // handle changing user name
     if (event.key === "Enter" && inputDOM === 'chatbar-username' && event.target.value !== this.props.currentUser) {
       this.props.handleEnter({

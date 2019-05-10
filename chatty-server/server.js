@@ -79,13 +79,13 @@ wss.on('connection', (ws) => {
     const messageWithId = {
       id: uuidv1(),
       header: {
-        socketId: socketId,
-        textColor: textColor,
+        socketId,
+        textColor,
       }, 
       message: {
         type: returnType,
-        content: content,
-        username: username,
+        content,
+        username,
       }
     };
 
